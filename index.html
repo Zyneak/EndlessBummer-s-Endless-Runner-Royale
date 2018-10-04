@@ -17,12 +17,25 @@
             margin-top:50px;
             border: 1px solid white;
         }
+
+        .info{
+            text-align: center;
+        }
+        .info span{
+             display: inline-block;
+             color: white;
+         }
     </style>
 </head>
 <body>
     <canvas id="quake_op_af" width="720" height="420">
 
     </canvas>
+    <div class="info">
+        <span id="position">Position: 0,0,0</span><br/>
+        <span id="rotation">Rotation: 0,0</span>
+    </div>
+    <span>Position: </span>
     <script type="text/javascript" src="gl-matrix.js"></script>
     <script type="text/javascript" src="index.js"></script>
 </body>

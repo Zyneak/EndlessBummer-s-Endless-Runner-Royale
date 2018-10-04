@@ -269,6 +269,8 @@ document.addEventListener("keydown",function(e) {
             console.log("Rot: " + cam.rotation);
             break;
     }
+    document.getElementById("position").innerHTML = "Position: " + cam.position[0].toFixed(3) + ", " + cam.position[1].toFixed(3) + ", " + cam.position[2].toFixed(3);
+    document.getElementById("rotation").innerHTML = "Rotation: " + cam.rotation[0] + ", " + cam.rotation[1];
 
 });
 
