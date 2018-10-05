@@ -26,7 +26,7 @@ varying vec3 v_positionWithOffset;
 
 class Camera{
     constructor() {
-        this.position = vec3.fromValues(3,0,-4);
+        this.position = vec3.fromValues(3,2,-4);
         this.rotation = vec2.fromValues(0,0);
         
     }
@@ -175,7 +175,7 @@ let a = new Game("quake_op_af",null,function(a) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     //          Deg to Rad pi/180
-    const FOV = 45 * Math.PI/180;
+    const FOV = 90 * Math.PI/180;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.01;
     const zFar = 100.0;
@@ -188,7 +188,8 @@ let a = new Game("quake_op_af",null,function(a) {
    // console.log(cam.rotation) 
     mat4.rotateX(modelViewMatrix,modelViewMatrix,cam.rotation[1] * (Math.PI/180));
     mat4.rotateY(modelViewMatrix,modelViewMatrix,cam.rotation[0] * (Math.PI/180));
-    mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],0,cam.position[2]]);
+    mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],-cam.position[1],cam.position[2]]);
+    mat4.scale(modelViewMatrix,modelViewMatrix,[1,-1,1]);
 
     const modelMatrix = mat4.create();
     mat4.translate(modelMatrix,modelMatrix,[0,0,-4]);
