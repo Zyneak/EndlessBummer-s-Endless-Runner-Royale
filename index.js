@@ -6,12 +6,13 @@ const vsSource = `
 
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
+    uniform mat4 uModelMatrix;
 
 
     varying vec3 v_positionWithOffset; 
     void main() {
         v_positionWithOffset = aVertexPosition;
-      gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition,1.0);
+      gl_Position = uProjectionMatrix * uModelViewMatrix * uModelMatrix * vec4(aVertexPosition,1.0);
     }
   `;
 
@@ -117,6 +118,7 @@ class Game{
         this.vertexPosition = gl.getAttribLocation(shaderProgram, 'aVertexPosition')
         this.projectionMatrix = gl.getUniformLocation(shaderProgram, 'uProjectionMatrix')
             this.modelViewMatrix = gl.getUniformLocation(shaderProgram, 'uModelViewMatrix')
+        this.modelMatrix = gl.getUniformLocation(shaderProgram, 'uModelMatrix')
 
         return shaderProgram;
     }
@@ -156,7 +158,15 @@ class Game{
 
 
 let cam = new Camera();
+let lastTime = new Date().getTime();
+let FPS = 0;
 let a = new Game("quake_op_af",null,function(a) {
+    if((new Date()).getTime()-lastTime >= 1000) {
+        document.getElementById("fps").innerHTML = "FPS: " + FPS;
+        lastTime = new Date().getTime();
+        FPS = 0;
+    }
+    FPS++;
     let gl = this.glContext;
     gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Clear to black, fully opaque
     gl.clearDepth(1.0);                 // Clear everything
@@ -174,9 +184,14 @@ let a = new Game("quake_op_af",null,function(a) {
     mat4.perspective(projectionMatrix,FOV,aspect,zNear,zFar);
 
     const modelViewMatrix = mat4.create();
+
    // console.log(cam.rotation) 
+    mat4.rotateX(modelViewMatrix,modelViewMatrix,cam.rotation[1] * (Math.PI/180));
     mat4.rotateY(modelViewMatrix,modelViewMatrix,cam.rotation[0] * (Math.PI/180));
     mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],0,cam.position[2]]);
+
+    const modelMatrix = mat4.create();
+    mat4.translate(modelMatrix,modelMatrix,[0,0,-4]);
 
     {
         const numComponents = 3;
@@ -194,6 +209,7 @@ let a = new Game("quake_op_af",null,function(a) {
 
         gl.uniformMatrix4fv(this.projectionMatrix,false,projectionMatrix);
         gl.uniformMatrix4fv(this.modelViewMatrix,false,modelViewMatrix);
+        gl.uniformMatrix4fv(this.modelMatrix,false,modelMatrix);
 
     {
         const offset  =0;
@@ -207,9 +223,29 @@ a.canvas.addEventListener("click",function(e) {
     e.target.requestPointerLock();
 })
 
-let speed = 0.01;
+a.canvas.addEventListener("mousemove",function(e) {
+    if(document.pointerLockElement === a.canvas ||  document.mozPointerLockElement === a.canvas) {
+            let dX = e.movementX;
+            let dY = e.movementY;
+            if(cam.rotation[1]+dY < -90) {
+                vec2.add(cam.rotation,cam.rotation,
+                    vec2.fromValues(dX/50,1));
+            } else if(cam.rotation+dY > 90) {
+                vec2.add(cam.rotation,cam.rotation,
+                    vec2.fromValues(dX/50,90));
+            } else {
+                vec2.add(cam.rotation,cam.rotation,
+                    vec2.fromValues(dX/50,e.movementY/50));
+            }
+    document.getElementById("rotation").innerHTML = "Rotation: " + cam.rotation[0].toFixed(3) + ", " + cam.rotation[1].toFixed(3);
+        } else {
+          firstRun = true;
+      }
+    
+});
+
+let speed = 0.1;
 document.addEventListener("keydown",function(e) {
-    console.log(cam);
     let oldPos = this.position;
     switch(e.key){
         case "w":
@@ -217,33 +253,11 @@ document.addEventListener("keydown",function(e) {
             vec3.add(cam.position,
                 cam.position,
                vec3.fromValues(
-                Math.cos(cam.rotation[0] * (Math.PI/180) )* speed,
-                0,
-                Math.sin(cam.rotation[0] * (Math.PI/180) )* speed));
-                console.log(cam.position);
-                console.log( (Math.cos(cam.rotation[0] * (Math.PI/180) )* speed) + " " +  Math.sin(cam.rotation[0] * (Math.PI/180) )* speed)
-            break;
-            case "s":
-            
-            vec3.add(cam.position,
-                cam.position,
-               vec3.fromValues(
-                Math.cos((cam.rotation[0]+180) * (Math.PI/180))* speed,
-                0,
-                Math.sin((cam.rotation[0]+180) * (Math.PI/180))* speed));
-            console.log(cam.position);
-            break;
-            case "a":
-            
-            vec3.add(cam.position,
-                cam.position,
-               vec3.fromValues(
                 Math.cos((cam.rotation[0]+90) * (Math.PI/180) )* speed,
                 0,
                 Math.sin((cam.rotation[0]+90) * (Math.PI/180) )* speed));
-            console.log(cam.position);
             break;
-            case "d":
+            case "s":
             
             vec3.add(cam.position,
                 cam.position,
@@ -251,7 +265,24 @@ document.addEventListener("keydown",function(e) {
                 Math.cos((cam.rotation[0]-90) * (Math.PI/180))* speed,
                 0,
                 Math.sin((cam.rotation[0]-90) * (Math.PI/180))* speed));
-            console.log(cam.position);
+            break;
+            case "a":
+            
+            vec3.add(cam.position,
+                cam.position,
+               vec3.fromValues(
+                Math.cos((cam.rotation[0]) * (Math.PI/180) )* speed,
+                0,
+                Math.sin((cam.rotation[0]) * (Math.PI/180) )* speed));
+            break;
+            case "d":
+            
+            vec3.add(cam.position,
+                cam.position,
+               vec3.fromValues(
+                Math.cos((cam.rotation[0]-180) * (Math.PI/180))* speed,
+                0,
+                Math.sin((cam.rotation[0]-180) * (Math.PI/180))* speed));
             break;
 
             case "q":
@@ -259,18 +290,15 @@ document.addEventListener("keydown",function(e) {
             vec2.add(cam.rotation,
                 cam.rotation,
                vec2.fromValues(-1,0));
-            console.log("Rot: " + cam.rotation);
             break;
             case "e":
             
             vec2.add(cam.rotation,
                 cam.rotation,
                vec2.fromValues(1,0));
-            console.log("Rot: " + cam.rotation);
             break;
     }
     document.getElementById("position").innerHTML = "Position: " + cam.position[0].toFixed(3) + ", " + cam.position[1].toFixed(3) + ", " + cam.position[2].toFixed(3);
-    document.getElementById("rotation").innerHTML = "Rotation: " + cam.rotation[0] + ", " + cam.rotation[1];
 
 });
 
