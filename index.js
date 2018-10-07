@@ -1,7 +1,5 @@
 import * as glm from "gl-matrix";
-
-console.log("Pennis");
-console.log(glm.mat4);
+import Camera from "./Camera";
 
 const vsSource = `
     attribute vec3 aVertexPosition;
@@ -26,13 +24,7 @@ varying vec3 v_positionWithOffset;
     }
   `;
 
-class Camera{
-    constructor() {
-        this.position = glm.vec3.fromValues(3,2,-4);
-        this.rotation = glm.vec2.fromValues(0,0);
-        this.firstRun = true;
-    }
-}
+
 
 
 
