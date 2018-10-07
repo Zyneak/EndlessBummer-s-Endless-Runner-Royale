@@ -22,12 +22,8 @@ module.exports = {
             }
         ]
     },
-    plugins: production ? [
-        new webpack.optimize.UglifyJsPlugin({
-          minimize: false,
-          compress: { warnings: false },
-        }),
-      ] : [],
+    plugins: 
+        "@babel/plugin-proposal-class-properties",
     resolve: {
         modules: [`${__dirname}/node_modules/`]
     }

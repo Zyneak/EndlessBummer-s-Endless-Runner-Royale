@@ -1,5 +1,6 @@
 import * as glm from "gl-matrix";
 import Camera from "./Camera";
+import Physics from "./Physics";
 
 const vsSource = `
     attribute vec3 aVertexPosition;
