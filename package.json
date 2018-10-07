@@ -1,0 +1,32 @@
+{
+  "name": "endless_runner",
+  "version": "1.0.0",
+  "description": "A skill-based endless runner not based on any other game",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --watch | webpack-dev-server --hot --progress"
+  },
+  "contributors": [
+    {
+      "name:": "Maurice Roy",
+      "url": "https://github.com/Maurice-Roy"
+    },
+    {
+      "name:": "Jordan Schnur",
+      "url": "https://github.com/Zyneak"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9"
+  },
+  "dependencies": {
+    "gl-matrix": "^2.8.1"
+  }
+}
