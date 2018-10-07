@@ -1,5 +1,7 @@
+import * as glm from "gl-matrix";
 
-
+console.log("Pennis");
+console.log(glm.mat4);
 
 const vsSource = `
     attribute vec3 aVertexPosition;
@@ -26,9 +28,9 @@ varying vec3 v_positionWithOffset;
 
 class Camera{
     constructor() {
-        this.position = vec3.fromValues(3,2,-4);
-        this.rotation = vec2.fromValues(0,0);
-        
+        this.position = glm.vec3.fromValues(3,2,-4);
+        this.rotation = glm.vec2.fromValues(0,0);
+        this.firstRun = true;
     }
 }
 
@@ -179,20 +181,20 @@ let a = new Game("quake_op_af",null,function(a) {
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.01;
     const zFar = 100.0;
-    const projectionMatrix = mat4.create();
+    const projectionMatrix = glm.mat4.create();
 
-    mat4.perspective(projectionMatrix,FOV,aspect,zNear,zFar);
+    glm.mat4.perspective(projectionMatrix,FOV,aspect,zNear,zFar);
 
-    const modelViewMatrix = mat4.create();
+    const modelViewMatrix = glm.mat4.create();
 
    // console.log(cam.rotation) 
-    mat4.rotateX(modelViewMatrix,modelViewMatrix,cam.rotation[1] * (Math.PI/180));
-    mat4.rotateY(modelViewMatrix,modelViewMatrix,cam.rotation[0] * (Math.PI/180));
-    mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],-cam.position[1],cam.position[2]]);
-    mat4.scale(modelViewMatrix,modelViewMatrix,[1,-1,1]);
+    glm.mat4.rotateX(modelViewMatrix,modelViewMatrix,cam.rotation[1] * (Math.PI/180));
+    glm.mat4.rotateY(modelViewMatrix,modelViewMatrix,cam.rotation[0] * (Math.PI/180));
+    glm.mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],-cam.position[1],cam.position[2]]);
+    glm.mat4.scale(modelViewMatrix,modelViewMatrix,[1,-1,1]);
 
-    const modelMatrix = mat4.create();
-    mat4.translate(modelMatrix,modelMatrix,[0,0,-4]);
+    const modelMatrix = glm.mat4.create();
+    glm.mat4.translate(modelMatrix,modelMatrix,[0,0,-4]);
 
     {
         const numComponents = 3;
@@ -224,24 +226,23 @@ a.canvas.addEventListener("click",function(e) {
     e.target.requestPointerLock();
 })
 
+
 a.canvas.addEventListener("mousemove",function(e) {
     if(document.pointerLockElement === a.canvas ||  document.mozPointerLockElement === a.canvas) {
             let dX = e.movementX;
             let dY = e.movementY;
             if(cam.rotation[1]+dY < -90) {
-                vec2.add(cam.rotation,cam.rotation,
-                    vec2.fromValues(dX/50,1));
+                glm.vec2.add(cam.rotation,cam.rotation,
+                    glm.vec2.fromValues(dX/50,1));
             } else if(cam.rotation+dY > 90) {
-                vec2.add(cam.rotation,cam.rotation,
-                    vec2.fromValues(dX/50,90));
+                glm.vec2.add(cam.rotation,cam.rotation,
+                    glm.vec2.fromValues(dX/50,90));
             } else {
-                vec2.add(cam.rotation,cam.rotation,
-                    vec2.fromValues(dX/50,e.movementY/50));
+                glm.vec2.add(cam.rotation,cam.rotation,
+                    glm.vec2.fromValues(dX/50,e.movementY/50));
             }
     document.getElementById("rotation").innerHTML = "Rotation: " + cam.rotation[0].toFixed(3) + ", " + cam.rotation[1].toFixed(3);
-        } else {
-          firstRun = true;
-      }
+        }
     
 });
 
@@ -251,27 +252,27 @@ document.addEventListener("keydown",function(e) {
     switch(e.key){
         case "w":
             
-            vec3.add(cam.position,
+        glm.vec3.add(cam.position,
                 cam.position,
-               vec3.fromValues(
+                glm.vec3.fromValues(
                 Math.cos((cam.rotation[0]+90) * (Math.PI/180) )* speed,
                 0,
                 Math.sin((cam.rotation[0]+90) * (Math.PI/180) )* speed));
             break;
             case "s":
             
-            vec3.add(cam.position,
+            glm.vec3.add(cam.position,
                 cam.position,
-               vec3.fromValues(
+                glm.vec3.fromValues(
                 Math.cos((cam.rotation[0]-90) * (Math.PI/180))* speed,
                 0,
                 Math.sin((cam.rotation[0]-90) * (Math.PI/180))* speed));
             break;
             case "a":
             
-            vec3.add(cam.position,
+            glm.vec3.add(cam.position,
                 cam.position,
-               vec3.fromValues(
+                glm.vec3.fromValues(
                 Math.cos((cam.rotation[0]) * (Math.PI/180) )* speed,
                 0,
                 Math.sin((cam.rotation[0]) * (Math.PI/180) )* speed));
@@ -280,7 +281,7 @@ document.addEventListener("keydown",function(e) {
             
             vec3.add(cam.position,
                 cam.position,
-               vec3.fromValues(
+                glm.vec3.fromValues(
                 Math.cos((cam.rotation[0]-180) * (Math.PI/180))* speed,
                 0,
                 Math.sin((cam.rotation[0]-180) * (Math.PI/180))* speed));
@@ -288,15 +289,15 @@ document.addEventListener("keydown",function(e) {
 
             case "q":
             
-            vec2.add(cam.rotation,
+            glm.vec2.add(cam.rotation,
                 cam.rotation,
-               vec2.fromValues(-1,0));
+                glm.vec2.fromValues(-1,0));
             break;
             case "e":
             
-            vec2.add(cam.rotation,
+            glm.vec2.add(cam.rotation,
                 cam.rotation,
-               vec2.fromValues(1,0));
+                glm.vec2.fromValues(1,0));
             break;
     }
     document.getElementById("position").innerHTML = "Position: " + cam.position[0].toFixed(3) + ", " + cam.position[1].toFixed(3) + ", " + cam.position[2].toFixed(3);
