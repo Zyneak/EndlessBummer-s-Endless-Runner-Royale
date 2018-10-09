@@ -1,4 +1,4 @@
-import * as glm from "gl-matrix";
+import {vec3,mat4,vec2} from "gl-matrix";
 import Camera from "./Camera";
 import Physics from "./Physics";
 import PhysicsBody from "./PhysicsBody";
@@ -28,9 +28,9 @@ varying vec3 v_positionWithOffset;
 
 
 let physics = new Physics();
-let obj1 = new PhysicsBody(glm.vec3.fromValues(2,2,2),glm.vec3.fromValues(0,0,-4));
-let obj2 = new PhysicsBody(glm.vec3.fromValues(1,2,1),glm.vec3.fromValues(0,0,0));
-let obj3 = new PhysicsBody(glm.vec3.fromValues(1000,1000,1000),glm.vec3.fromValues(0,0,0));
+let obj1 = new PhysicsBody(vec3.fromValues(2,2,2),vec3.fromValues(0,0,-4));
+let obj2 = new PhysicsBody(vec3.fromValues(1,2,1),vec3.fromValues(0,0,0));
+let obj3 = new PhysicsBody(vec3.fromValues(1000,1000,1000),vec3.fromValues(0,0,0));
 physics.addBody(obj1);
 physics.addBody(obj2);
 physics.addBody(obj3);
@@ -94,6 +94,7 @@ class Game{
             1.0,-1.0, 1.0
         ];
         gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(positions),gl.STATIC_DRAW);
+
 
 
         this.draw = draw;
@@ -182,22 +183,22 @@ let a = new Game("quake_op_af",null,function(a) {
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.01;
     const zFar = 100.0;
-    const projectionMatrix = glm.mat4.create();
+    const projectionMatrix = mat4.create();
 
-    glm.mat4.perspective(projectionMatrix,FOV,aspect,zNear,zFar);
+    mat4.perspective(projectionMatrix,FOV,aspect,zNear,zFar);
 
-    const modelViewMatrix = glm.mat4.create();
+    const modelViewMatrix = mat4.create();
 
    // console.log(cam.rotation)
 
-    glm.mat4.rotateX(modelViewMatrix,modelViewMatrix,cam.rotation[1] * (Math.PI/180));
-    glm.mat4.rotateY(modelViewMatrix,modelViewMatrix,cam.rotation[0] * (Math.PI/180));
-    glm.mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],-cam.position[1],cam.position[2]]);
+    mat4.rotateX(modelViewMatrix,modelViewMatrix,cam.rotation[1] * (Math.PI/180));
+    mat4.rotateY(modelViewMatrix,modelViewMatrix,cam.rotation[0] * (Math.PI/180));
+    mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],-cam.position[1],cam.position[2]]);
     //@TODO Understand why I have to flip the Z axis to get the camera matrix and model matrix to match
-    glm.mat4.scale(modelViewMatrix,modelViewMatrix,[1,1,-1]);
+    mat4.scale(modelViewMatrix,modelViewMatrix,[1,1,-1]);
 
-    const modelMatrix = glm.mat4.create();
-    glm.mat4.translate(modelMatrix,modelMatrix,[0,0,4]);
+    const modelMatrix = mat4.create();
+    mat4.translate(modelMatrix,modelMatrix,[0,0,4]);
 
     {
         const numComponents = 3;
@@ -235,14 +236,14 @@ a.canvas.addEventListener("mousemove",function(e) {
             let dX = e.movementX;
             let dY = e.movementY;
             if(cam.rotation[1]+dY < -90) {
-                glm.vec2.add(cam.rotation,cam.rotation,
-                    glm.vec2.fromValues(dX/50,1));
+                vec2.add(cam.rotation,cam.rotation,
+                    vec2.fromValues(dX/50,1));
             } else if(cam.rotation+dY > 90) {
-                glm.vec2.add(cam.rotation,cam.rotation,
-                    glm.vec2.fromValues(dX/50,90));
+                vec2.add(cam.rotation,cam.rotation,
+                    vec2.fromValues(dX/50,90));
             } else {
-                glm.vec2.add(cam.rotation,cam.rotation,
-                    glm.vec2.fromValues(dX/50,e.movementY/50));
+                vec2.add(cam.rotation,cam.rotation,
+                    vec2.fromValues(dX/50,e.movementY/50));
             }
     document.getElementById("rotation").innerHTML = "Rotation: " + cam.rotation[0].toFixed(3) + ", " + cam.rotation[1].toFixed(3);
         }
@@ -255,27 +256,27 @@ document.addEventListener("keydown",function(e) {
     switch(e.key){
         case "w":
             
-        glm.vec3.add(cam.position,
+        vec3.add(cam.position,
                 cam.position,
-                glm.vec3.fromValues(
+                vec3.fromValues(
                 Math.cos((cam.rotation[0]+90) * (Math.PI/180) )* speed,
                 0,
                 Math.sin((cam.rotation[0]+90) * (Math.PI/180) )* speed));
             break;
             case "s":
             
-            glm.vec3.add(cam.position,
+            vec3.add(cam.position,
                 cam.position,
-                glm.vec3.fromValues(
+                vec3.fromValues(
                 Math.cos((cam.rotation[0]-90) * (Math.PI/180))* speed,
                 0,
                 Math.sin((cam.rotation[0]-90) * (Math.PI/180))* speed));
             break;
             case "a":
             
-            glm.vec3.add(cam.position,
+            vec3.add(cam.position,
                 cam.position,
-                glm.vec3.fromValues(
+                vec3.fromValues(
                 Math.cos((cam.rotation[0]) * (Math.PI/180) )* speed,
                 0,
                 Math.sin((cam.rotation[0]) * (Math.PI/180) )* speed));
@@ -284,7 +285,7 @@ document.addEventListener("keydown",function(e) {
             
             vec3.add(cam.position,
                 cam.position,
-                glm.vec3.fromValues(
+                vec3.fromValues(
                 Math.cos((cam.rotation[0]-180) * (Math.PI/180))* speed,
                 0,
                 Math.sin((cam.rotation[0]-180) * (Math.PI/180))* speed));
@@ -292,15 +293,15 @@ document.addEventListener("keydown",function(e) {
 
             case "q":
             
-            glm.vec2.add(cam.rotation,
+            vec2.add(cam.rotation,
                 cam.rotation,
-                glm.vec2.fromValues(-1,0));
+                vec2.fromValues(-1,0));
             break;
             case "e":
             
-            glm.vec2.add(cam.rotation,
+            vec2.add(cam.rotation,
                 cam.rotation,
-                glm.vec2.fromValues(1,0));
+                vec2.fromValues(1,0));
             break;
     }
     document.getElementById("position").innerHTML = "Position: " + cam.position[0].toFixed(3) + ", " + cam.position[1].toFixed(3) + ", " + cam.position[2].toFixed(3);
