@@ -5,6 +5,10 @@ export default class Physics {
         this.bodies = {};
     }
 
+    run =() =>{
+
+    }
+
     addBody =(body) => {
         this.bodies.push(body);
     }
