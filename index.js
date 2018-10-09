@@ -28,10 +28,12 @@ varying vec3 v_positionWithOffset;
 
 
 let physics = new Physics();
-let obj1 = new PhysicsBody(glm.vec3.fromValues(2,1,1),glm.vec3.fromValues(0,0,-4));
+let obj1 = new PhysicsBody(glm.vec3.fromValues(2,2,2),glm.vec3.fromValues(0,0,-4));
 let obj2 = new PhysicsBody(glm.vec3.fromValues(1,2,1),glm.vec3.fromValues(0,0,0));
+let obj3 = new PhysicsBody(glm.vec3.fromValues(1000,1000,1000),glm.vec3.fromValues(0,0,0));
 physics.addBody(obj1);
 physics.addBody(obj2);
+physics.addBody(obj3);
 
 
 
@@ -176,7 +178,7 @@ let a = new Game("quake_op_af",null,function(a) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     //          Deg to Rad pi/180
-    const FOV = 90 * Math.PI/180;
+    const FOV = 70 * Math.PI/180;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.01;
     const zFar = 100.0;
@@ -186,14 +188,16 @@ let a = new Game("quake_op_af",null,function(a) {
 
     const modelViewMatrix = glm.mat4.create();
 
-   // console.log(cam.rotation) 
+   // console.log(cam.rotation)
+
     glm.mat4.rotateX(modelViewMatrix,modelViewMatrix,cam.rotation[1] * (Math.PI/180));
     glm.mat4.rotateY(modelViewMatrix,modelViewMatrix,cam.rotation[0] * (Math.PI/180));
     glm.mat4.translate(modelViewMatrix,modelViewMatrix,[cam.position[0],-cam.position[1],cam.position[2]]);
-    glm.mat4.scale(modelViewMatrix,modelViewMatrix,[1,-1,1]);
+    //@TODO Understand why I have to flip the Z axis to get the camera matrix and model matrix to match
+    glm.mat4.scale(modelViewMatrix,modelViewMatrix,[1,1,-1]);
 
     const modelMatrix = glm.mat4.create();
-    glm.mat4.translate(modelMatrix,modelMatrix,[0,0,-4]);
+    glm.mat4.translate(modelMatrix,modelMatrix,[0,0,4]);
 
     {
         const numComponents = 3;

@@ -8,6 +8,26 @@ export default class PhysicsBody {
         this.position = vec3.clone(position);
         this.velocity = vec3.create();
         this.id = Math.floor(Math.random() * Math.floor(99999999));
+        this.bounds = {
+            x: [this.position[0]-this.size[0],this.position[0]+this.size[0]],
+            y: [this.position[1]-this.size[1],this.position[1]+this.size[1]],
+            z: [this.position[2]-this.size[2],this.position[2]+this.size[2]]};
+
+    }
+
+    calculateBounds =() => {
+        this.bounds = {
+            x: [this.position[0]-this.size[0],this.position[0]+this.size[0]],
+            y: [this.position[1]-this.size[1],this.position[1]+this.size[1]],
+            z: [this.position[2]-this.size[2],this.position[2]+this.size[2]]};
+    }
+
+
+    collidesWith =(obj) => {
+        this.calculateBounds();
+        obj.calculateBounds();
+        if()
+
     }
 
     static distanceFrom =(obj1,obj2) => {
