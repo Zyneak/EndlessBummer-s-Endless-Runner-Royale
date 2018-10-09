@@ -29,5 +29,8 @@
   },
   "dependencies": {
     "gl-matrix": "^2.8.1"
+  },
+  "babel": {
+    "plugins": ["@babel/plugin-proposal-class-properties"]
   }
 }
