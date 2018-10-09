@@ -95,7 +95,7 @@ class Game{
         ];
         gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(positions),gl.STATIC_DRAW);
 
-
+        physics.run();
 
         this.draw = draw;
         
