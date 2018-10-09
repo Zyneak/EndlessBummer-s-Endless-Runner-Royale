@@ -24,5 +24,8 @@ module.exports = {
     },
     resolve: {
         modules: [`${__dirname}/node_modules/`]
+    },
+    optimization: {
+        minimizer: [new UglifyJsPlugin()]
     }
 }

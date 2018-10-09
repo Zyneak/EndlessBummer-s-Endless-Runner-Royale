@@ -27,6 +27,11 @@ varying vec3 v_positionWithOffset;
   `;
 
 
+let physics = new Physics();
+let obj1 = new PhysicsBody(glm.vec3.fromValues(2,1,1),glm.vec3.fromValues(0,0,-4));
+let obj2 = new PhysicsBody(glm.vec3.fromValues(1,2,1),glm.vec3.fromValues(0,0,0));
+physics.addBody(obj1);
+physics.addBody(obj2);
 
 
 
