@@ -18,6 +18,11 @@ module.exports = {
             }
         ]
     },
+    resolve:{
+        alias: {
+            'gl-matrix': path.join(__dirname,"./node_modules/gl-matrix"),
+        },
+    },
     devServer: {
         contentBase: path.join(__dirname, '/'),
         publicPath: "/",
