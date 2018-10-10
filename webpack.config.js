@@ -1,9 +1,5 @@
-const webpack = require('webpack');
-const WebpackDevServer = require('webpack-dev-server')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
-
-const production = process.env.NODE_ENV === 'production';
+var path = require('path');
 
 module.exports = {
     mode: "development",
@@ -22,8 +18,11 @@ module.exports = {
             }
         ]
     },
-    resolve: {
-        modules: ['node_modules/']
+    devServer: {
+        contentBase: path.join(__dirname, '/'),
+        publicPath: "/",
+        port: 8000,
+        clientLogLevel: 'warning',
     },
     optimization: {
         minimizer: [new UglifyJsPlugin()]
