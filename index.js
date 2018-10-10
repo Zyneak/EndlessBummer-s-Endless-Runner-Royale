@@ -28,10 +28,13 @@ varying vec3 v_positionWithOffset;
 
 
 let physics = new Physics();
-let obj1 = new PhysicsBody(vec3.fromValues(2,2,2),vec3.fromValues(3,0,0));
-let obj2 = new PhysicsBody(vec3.fromValues(1,2,1),vec3.fromValues(0,0,0));
-physics.addBody(obj1);
-physics.addBody(obj2);
+let obj1 = new PhysicsBody(vec3.fromValues(1,1,1),vec3.fromValues(3,0,0));
+let char = new PhysicsBody(vec3.fromValues(1,2,1),vec3.fromValues(0,0,0));
+let obj3 = new PhysicsBody(vec3.fromValues(1000,5,1000),vec3.fromValues(0,0,0));
+//physics.addBody(obj1);
+physics.addBody(char);
+physics.addBody(obj3);
+console.log(obj3);
 
 
 
@@ -178,7 +181,7 @@ let a = new Game("quake_op_af",null,function(a) {
     gl.depthFunc(gl.LESS);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    obj2.position = vec3.fromValues(cam.position[0],cam.position[1],cam.position[2]);
+    char.position = vec3.fromValues(cam.position[0],cam.position[1]-2,cam.position[2]);
     //          Deg to Rad pi/180
     const FOV = 70 * Math.PI/180;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -258,6 +261,7 @@ document.getElementById("position").innerHTML = "Position: " + cam.position[0].t
 let speed = 0.1;
 document.addEventListener("keydown",function(e) {
     let oldPos = this.position;
+    //FIXME Camera 90 degree offset
     switch(e.key){
         case "w":
             

@@ -23,7 +23,7 @@ module.exports = {
         ]
     },
     resolve: {
-        modules: [`node_modules/`]
+        modules: ['node_modules/']
     },
     optimization: {
         minimizer: [new UglifyJsPlugin()]

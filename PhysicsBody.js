@@ -14,9 +14,10 @@ export default class PhysicsBody {
 
     calculateBounds =() => {
         this.bounds = {
-            x: {min: this.position[0]-this.size[0], max: this.position[0]+this.size[0]},
-            y: {min: this.position[1]-this.size[1], max: this.position[1]+this.size[1]},
-            z: {min: this.position[2]-this.size[2], max: this.position[2]+this.size[2]}};
+            x: {min: this.position[0]-this.size[0]*.5, max: this.position[0]+this.size[0]*.5},
+            y: {min: this.position[1]-this.size[1]*.5, max: this.position[1]+this.size[1]*.5},
+            z: {min: this.position[2]-this.size[2]*.5, max: this.position[2]+this.size[2]*.5}};
+        return this.bounds;
     }
 
     //Debug method
@@ -37,7 +38,7 @@ export default class PhysicsBody {
         //let V2 = vec3.fromValues(-3,-6,0);
         //Resultant
         //let R1 = vec3.create();
-        //vec3.add(R1,V1,V2);
+        //vec3.add(R1,V1,V2)
         return (this.bounds.x.min <= obj.bounds.x.max && this.bounds.x.max >= obj.bounds.x.min) &&
             (this.bounds.y.min <= obj.bounds.y.max && this.bounds.y.max >= obj.bounds.y.min)&&
             (this.bounds.z.min <= obj.bounds.z.max && this.bounds.z.max >= obj.bounds.z.min);
