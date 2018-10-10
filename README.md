@@ -1,4 +1,4 @@
-# EndlessBummer-s-Endless-Runner-Royale
+# EndlessBummer's Endless Runner Royale
 
 ## Installation
 
