@@ -23,21 +23,24 @@ export default class PhysicsBody {
     info =() => {
         console.log("Info for " + this.name
             + ": Position: " + vec3.str(this.position)
-            + ": Position: " + vec3.str(this.position))
+            + ": Size: " + vec3.str(this.size)
+            + ": Velocity: " + vec3.str(this.velocity))
     }
 
 
+    //@TODO Implement real physics
     collidesWith =(obj) => {
         this.calculateBounds();
         obj.calculateBounds();
-        let V1 = this.velocity;
-        console.log(V1);
-        let V2 = vec3.fromValues(-3,-6,0);
+        //let V1 = this.velocity;
+        //console.log(V1);
+        //let V2 = vec3.fromValues(-3,-6,0);
         //Resultant
-        let R1 = vec3.create();
-        vec3.add(R1,V1,V2);
-        //if(this.calculateBounds().x.min)
-        return true;
+        //let R1 = vec3.create();
+        //vec3.add(R1,V1,V2);
+        return (this.bounds.x.min <= obj.bounds.x.max && this.bounds.x.max >= obj.bounds.x.min) &&
+            (this.bounds.y.min <= obj.bounds.y.max && this.bounds.y.max >= obj.bounds.y.min)&&
+            (this.bounds.z.min <= obj.bounds.z.max && this.bounds.z.max >= obj.bounds.z.min);
 
     }
 

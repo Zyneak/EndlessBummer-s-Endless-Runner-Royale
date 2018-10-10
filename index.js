@@ -28,12 +28,10 @@ varying vec3 v_positionWithOffset;
 
 
 let physics = new Physics();
-let obj1 = new PhysicsBody(vec3.fromValues(2,2,2),vec3.fromValues(0,0,-4));
+let obj1 = new PhysicsBody(vec3.fromValues(2,2,2),vec3.fromValues(3,0,0));
 let obj2 = new PhysicsBody(vec3.fromValues(1,2,1),vec3.fromValues(0,0,0));
-let obj3 = new PhysicsBody(vec3.fromValues(1000,1000,1000),vec3.fromValues(0,0,0));
 physics.addBody(obj1);
 physics.addBody(obj2);
-physics.addBody(obj3);
 
 
 
@@ -95,7 +93,7 @@ class Game{
         ];
         gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(positions),gl.STATIC_DRAW);
 
-        physics.run();
+
 
         this.draw = draw;
         
@@ -149,9 +147,11 @@ class Game{
         let a = this;
         window.setInterval(function() {
             a.draw();
-        },1000 / 144);
-        let l = 0;
-        let FPS = 60;
+        },1000 / 60);
+
+        window.setInterval(function(){
+            physics.run();
+        },1000/30);
     }
 
     setupCallback() {
@@ -178,6 +178,7 @@ let a = new Game("quake_op_af",null,function(a) {
     gl.depthFunc(gl.LESS);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    obj2.position = vec3.fromValues(cam.position[0],cam.position[1],cam.position[2]);
     //          Deg to Rad pi/180
     const FOV = 70 * Math.PI/180;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -198,7 +199,9 @@ let a = new Game("quake_op_af",null,function(a) {
     mat4.scale(modelViewMatrix,modelViewMatrix,[1,1,-1]);
 
     const modelMatrix = mat4.create();
-    mat4.translate(modelMatrix,modelMatrix,[0,0,4]);
+    //mat4.scale(modelViewMatrix,modelViewMatrix,[1,1,-1]);
+    mat4.translate(modelMatrix,modelMatrix,[-3,0,0]);
+
 
     {
         const numComponents = 3;
@@ -249,6 +252,8 @@ a.canvas.addEventListener("mousemove",function(e) {
         }
     
 });
+document.getElementById("rotation").innerHTML = "Rotation: " + cam.rotation[0].toFixed(3) + ", " + cam.rotation[1].toFixed(3);
+document.getElementById("position").innerHTML = "Position: " + cam.position[0].toFixed(3) + ", " + cam.position[1].toFixed(3) + ", " + cam.position[2].toFixed(3);
 
 let speed = 0.1;
 document.addEventListener("keydown",function(e) {
