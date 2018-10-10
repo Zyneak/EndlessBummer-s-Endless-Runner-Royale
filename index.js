@@ -99,8 +99,7 @@ class Game{
 
 
         this.draw = draw;
-        
-        
+
         //this.draw.call(this);
     }
 
@@ -316,5 +315,4 @@ document.addEventListener("keydown",function(e) {
     document.getElementById("position").innerHTML = "Position: " + cam.position[0].toFixed(3) + ", " + cam.position[1].toFixed(3) + ", " + cam.position[2].toFixed(3);
 
 });
-
 a.loop();
