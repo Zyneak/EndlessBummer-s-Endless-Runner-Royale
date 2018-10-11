@@ -29,8 +29,12 @@ varying vec3 v_positionWithOffset;
 
 let physics = new Physics();
 let obj1 = new PhysicsBody(vec3.fromValues(1,1,1),vec3.fromValues(3,0,0));
+obj1.name = "Cube";
 let char = new PhysicsBody(vec3.fromValues(1,2,1),vec3.fromValues(0,0,0));
+char.name = "Doomguy";
+char.movable = true;
 let obj3 = new PhysicsBody(vec3.fromValues(1000,5,1000),vec3.fromValues(0,0,0));
+obj3.name = "Plane";
 //physics.addBody(obj1);
 physics.addBody(char);
 physics.addBody(obj3);
@@ -153,7 +157,7 @@ class Game{
 
         window.setInterval(function(){
             physics.run();
-        },1000/30);
+        },1000 / 60);
     }
 
     setupCallback() {
